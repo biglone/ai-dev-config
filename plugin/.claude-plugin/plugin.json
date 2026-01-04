@@ -1,0 +1,19 @@
+{
+  "name": "ai-dev-config",
+  "description": "Personal AI development tools configuration and automation",
+  "version": "1.0.0",
+  "author": {
+    "name": "biglone",
+    "email": "your-email@example.com"
+  },
+  "homepage": "https://github.com/biglone/ai-dev-config",
+  "repository": "https://github.com/biglone/ai-dev-config",
+  "license": "MIT",
+  "keywords": [
+    "settings",
+    "configuration",
+    "automation",
+    "development",
+    "productivity"
+  ]
+}

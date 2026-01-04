@@ -1,0 +1,13 @@
+# macOS
+.DS_Store
+
+# IDE
+.vscode/
+.idea/
+
+# Backup files
+*.backup.*
+
+# User-specific local configs (add these if you want to keep personal overrides)
+# claude/settings.local.json
+# cursor/settings.local.json

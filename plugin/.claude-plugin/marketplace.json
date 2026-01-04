@@ -1,0 +1,21 @@
+{
+  "name": "biglone-ai-config",
+  "owner": {
+    "name": "biglone",
+    "email": "your-email@example.com"
+  },
+  "plugins": [
+    {
+      "name": "ai-dev-config",
+      "source": "./",
+      "description": "Personal AI development tools configuration and automation",
+      "version": "1.0.0",
+      "author": {
+        "name": "biglone"
+      },
+      "homepage": "https://github.com/biglone/ai-dev-config",
+      "repository": "https://github.com/biglone/ai-dev-config",
+      "license": "MIT"
+    }
+  ]
+}

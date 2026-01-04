@@ -1,0 +1,15 @@
+{
+  "hooks": {
+    "PostToolUse": [
+      {
+        "matcher": "Write|Edit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "echo '✓ Code modified. Consider running linter/formatter if needed.'"
+          }
+        ]
+      }
+    ]
+  }
+}
