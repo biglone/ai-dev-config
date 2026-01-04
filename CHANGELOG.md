@@ -5,6 +5,22 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.1.1] - 2026-01-04
+
+### Added
+- **Remote installation script** (`install-remote.sh`): New dedicated script for one-line installation
+  - Downloads latest version from GitHub automatically to temporary directory
+  - Executes installation from within the repository directory
+  - Cleans up temporary files after installation
+  - Supports all installation scopes (user/project/local) via command-line arguments
+  - Compatible with `curl | bash` pattern
+
+### Fixed
+- **Critical**: Fixed `curl | bash` installation pattern that was failing with "file not found" error
+  - Previous `install.sh` expected to run from repository directory
+  - New `install-remote.sh` clones repository first, then runs installation
+- Updated README with correct one-line installation commands
+
 ## [1.1.0] - 2026-01-04
 
 ### Added
@@ -13,11 +29,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - Automatically preserves enabled plugins (`enabledPlugins`)
   - Automatically preserves other custom configuration keys
   - Works with jq, Python, Node.js, or PowerShell (auto-detected)
-- **Remote installation script** (`install-remote.sh`): New one-line installation method
-  - Downloads latest version from GitHub automatically
-  - Cleans up temporary files after installation
-  - Supports all installation scopes (user/project/local)
-  - Compatible with `curl | bash` pattern
 - `--force` flag for installation scripts to skip merging and force overwrite
 - Improved installation output showing what was preserved and what was added
 - Enhanced error handling with graceful fallback to simple copy if merge fails
@@ -51,5 +62,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Explicit confirmation for destructive operations
 - Deny rules for dangerous commands (rm -rf, sudo)
 
+[1.1.1]: https://github.com/biglone/ai-dev-config/compare/v1.1.0...v1.1.1
 [1.1.0]: https://github.com/biglone/ai-dev-config/compare/v1.0.0...v1.1.0
 [1.0.0]: https://github.com/biglone/ai-dev-config/releases/tag/v1.0.0

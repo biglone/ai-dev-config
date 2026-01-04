@@ -2,7 +2,7 @@
 
 # AI Dev Config Remote Installer
 # Downloads and installs configuration from GitHub
-# Version 1.1.0
+# Version 1.1.1
 
 set -e
 
@@ -73,7 +73,7 @@ trap cleanup EXIT
 
 main() {
     echo "╔════════════════════════════════════════════════╗"
-    echo "║   AI Dev Config Remote Installer v1.1.0       ║"
+    echo "║   AI Dev Config Remote Installer v1.1.1       ║"
     echo "║   Smart merge · Preserve your settings        ║"
     echo "╚════════════════════════════════════════════════╝"
     echo
