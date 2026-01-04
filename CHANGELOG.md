@@ -13,6 +13,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - Automatically preserves enabled plugins (`enabledPlugins`)
   - Automatically preserves other custom configuration keys
   - Works with jq, Python, Node.js, or PowerShell (auto-detected)
+- **Remote installation script** (`install-remote.sh`): New one-line installation method
+  - Downloads latest version from GitHub automatically
+  - Cleans up temporary files after installation
+  - Supports all installation scopes (user/project/local)
+  - Compatible with `curl | bash` pattern
 - `--force` flag for installation scripts to skip merging and force overwrite
 - Improved installation output showing what was preserved and what was added
 - Enhanced error handling with graceful fallback to simple copy if merge fails

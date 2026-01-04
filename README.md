@@ -10,12 +10,26 @@ This repository contains my personal configuration files and automation scripts 
 
 **macOS / Linux:**
 ```bash
-curl -fsSL https://raw.githubusercontent.com/biglone/ai-dev-config/main/install.sh | bash
+curl -fsSL https://raw.githubusercontent.com/biglone/ai-dev-config/main/install-remote.sh | bash
+```
+
+With options:
+```bash
+# Install in project scope
+curl -fsSL https://raw.githubusercontent.com/biglone/ai-dev-config/main/install-remote.sh | bash -s -- --project
+
+# Force overwrite without merging
+curl -fsSL https://raw.githubusercontent.com/biglone/ai-dev-config/main/install-remote.sh | bash -s -- --force
 ```
 
 **Windows (PowerShell):**
 ```powershell
-iwr -useb https://raw.githubusercontent.com/biglone/ai-dev-config/main/install.ps1 | iex
+# Note: Remote installation for Windows is not yet supported via one-liner
+# Please use Option 2 (Manual Installation) instead
+iwr -useb https://github.com/biglone/ai-dev-config/archive/refs/heads/main.zip -OutFile ai-dev-config.zip
+Expand-Archive ai-dev-config.zip -DestinationPath .
+cd ai-dev-config-main
+.\install.ps1
 ```
 
 ### Option 2: Manual Installation
@@ -226,6 +240,14 @@ ai-dev-config/
 
 ## 🔄 Updating Configuration
 
+### Update via One-Line Command (Easiest)
+
+```bash
+curl -fsSL https://raw.githubusercontent.com/biglone/ai-dev-config/main/install-remote.sh | bash
+```
+
+The remote installer automatically downloads the latest version and merges with your existing settings.
+
 ### Update Local Copy
 
 ```bash
@@ -242,7 +264,15 @@ claude plugin update ai-dev-config@biglone-ai-config
 
 ## 🤝 Sharing with Your Team
 
-### Method 1: Direct Installation
+### Method 1: One-Line Installation (Easiest)
+
+Share this command with your team for project-wide configuration:
+
+```bash
+curl -fsSL https://raw.githubusercontent.com/biglone/ai-dev-config/main/install-remote.sh | bash -s -- --project
+```
+
+### Method 2: Clone and Install
 
 Share the repository URL with your team:
 
