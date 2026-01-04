@@ -40,6 +40,33 @@ claude plugin marketplace add biglone/ai-dev-config
 claude plugin install ai-dev-config@biglone-ai-config
 ```
 
+## ✨ Smart Configuration Merge
+
+**Version 1.1.0** introduces intelligent configuration merging:
+
+- **Preserves your existing settings**: Environment variables, enabled plugins, and custom configurations are automatically retained
+- **Adds new permissions**: Fine-grained permission controls are merged into your existing config
+- **Automatic backups**: Every installation creates a timestamped backup of your current settings
+- **Multiple JSON processors**: Works with jq, Python, Node.js, or PowerShell (depending on what's available)
+- **Force overwrite option**: Use `--force` flag to skip merging and do a clean install
+
+**Example merge behavior:**
+```bash
+# Before: Your existing settings
+{
+  "env": { ... },
+  "enabledPlugins": { ... }
+}
+
+# After: Merged with new permissions
+{
+  "$schema": "...",
+  "env": { ... },              # ← Preserved
+  "enabledPlugins": { ... },   # ← Preserved
+  "permissions": { ... }       # ← Added
+}
+```
+
 ## 📦 What's Included
 
 ### Claude Code Configuration
@@ -87,7 +114,8 @@ Custom Claude Code plugin with:
 Applies configuration globally to all projects on your machine.
 
 ```bash
-./install.sh           # Default scope
+./install.sh           # Default scope (smart merge)
+./install.sh --force   # Force overwrite without merging
 ```
 
 Configuration location:
