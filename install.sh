@@ -2,7 +2,7 @@
 
 # AI Dev Config Installer
 # Installs configuration for Claude Code, Cursor, and other AI dev tools
-# Version 1.1.0 - Smart merge support
+# Version 1.2.0 - Simple mode support
 
 set -e
 
@@ -155,6 +155,7 @@ echo
 # Get installation scope
 SCOPE="user"
 FORCE_OVERWRITE=false
+SIMPLE_MODE=false
 
 while [[ $# -gt 0 ]]; do
     case $1 in
@@ -170,9 +171,13 @@ while [[ $# -gt 0 ]]; do
             FORCE_OVERWRITE=true
             shift
             ;;
+        --simple)
+            SIMPLE_MODE=true
+            shift
+            ;;
         *)
             print_error "Unknown option: $1"
-            echo "Usage: $0 [--project|--local] [--force]"
+            echo "Usage: $0 [--project|--local] [--force] [--simple]"
             exit 1
             ;;
     esac
@@ -184,6 +189,10 @@ elif [[ "$SCOPE" == "local" ]]; then
     print_info "Installing in local scope"
 else
     print_info "Installing in user scope (global)"
+fi
+
+if [[ "$SIMPLE_MODE" == true ]]; then
+    print_info "Using simple mode (workspace full permissions)"
 fi
 echo
 
@@ -204,7 +213,12 @@ install_claude_config() {
     mkdir -p "$claude_dir"
 
     local settings_file="$claude_dir/settings.json"
-    local new_settings="claude/settings.json"
+    local new_settings
+    if [[ "$SIMPLE_MODE" == true ]]; then
+        new_settings="claude/settings-simple.json"
+    else
+        new_settings="claude/settings.json"
+    fi
 
     # Check if existing settings exist
     if [[ -f "$settings_file" ]]; then
@@ -269,16 +283,82 @@ install_cursor_config() {
     fi
 }
 
+# Codex CLI Configuration
+install_codex_config() {
+    print_info "Installing Codex CLI configuration..."
+
+    local codex_dir="$HOME/.codex"
+    local config_file="$codex_dir/config.toml"
+
+    # Check if Codex is installed
+    if [[ ! -d "$codex_dir" ]]; then
+        print_warning "Codex directory not found (~/.codex). Skipping Codex configuration."
+        print_info "Install Codex first: npm install -g @openai/codex"
+        return
+    fi
+
+    # Backup existing config
+    if [[ -f "$config_file" ]]; then
+        backup_file="$config_file.backup.$(date +%Y%m%d_%H%M%S)"
+        cp "$config_file" "$backup_file"
+        print_warning "Backed up existing config to: $backup_file"
+    fi
+
+    # Select config file based on mode
+    local new_config
+    if [[ "$SIMPLE_MODE" == true ]]; then
+        new_config="codex/config-simple.toml"
+    else
+        new_config="codex/config-simple.toml"  # Default to simple for now
+    fi
+
+    if [[ -f "$new_config" ]]; then
+        # Merge: append new settings to existing config (preserve project trust settings)
+        if [[ -f "$config_file" ]]; then
+            # Extract project settings from existing config
+            grep -E '^\[projects\.' "$config_file" > /tmp/codex_projects.tmp 2>/dev/null || true
+            grep -E '^trust_level' "$config_file" >> /tmp/codex_projects.tmp 2>/dev/null || true
+
+            # Start with new config
+            cp "$new_config" "$config_file"
+
+            # Append project settings if they exist
+            if [[ -s /tmp/codex_projects.tmp ]]; then
+                echo "" >> "$config_file"
+                echo "# Preserved project trust settings" >> "$config_file"
+                cat /tmp/codex_projects.tmp >> "$config_file"
+            fi
+            rm -f /tmp/codex_projects.tmp
+            print_success "Codex config merged to: $config_file"
+        else
+            cp "$new_config" "$config_file"
+            print_success "Codex config installed to: $config_file"
+        fi
+    else
+        print_warning "No Codex config found in ai-dev-config/codex/"
+    fi
+}
+
 # Main installation
 main() {
     echo "╔════════════════════════════════════════════════╗"
-    echo "║      AI Dev Config Installer v1.1.0           ║"
-    echo "║      Smart merge · Preserve your settings     ║"
+    echo "║      AI Dev Config Installer v1.2.0           ║"
+    echo "║      Simple mode · Workspace full permissions ║"
     echo "╚════════════════════════════════════════════════╝"
     echo
 
     install_claude_config
     echo
+
+    # Ask if user wants to install Codex config
+    if [[ -f "codex/config-simple.toml" ]]; then
+        read -p "Install Codex CLI configuration? (y/N) " -n 1 -r
+        echo
+        if [[ $REPLY =~ ^[Yy]$ ]]; then
+            install_codex_config
+            echo
+        fi
+    fi
 
     # Ask if user wants to install Cursor config
     if [[ -f "cursor/settings.json" ]]; then
@@ -293,21 +373,23 @@ main() {
     echo
     print_success "Installation complete!"
     echo
-    print_info "To verify Claude Code settings:"
+    print_info "To verify settings:"
     if [[ "$SCOPE" == "user" ]]; then
-        echo "  cat ~/.claude/settings.json"
+        echo "  cat ~/.claude/settings.json   # Claude Code"
     else
-        echo "  cat .claude/settings.json"
+        echo "  cat .claude/settings.json     # Claude Code"
     fi
+    echo "  cat ~/.codex/config.toml        # Codex CLI"
     echo
     print_info "Usage:"
-    echo "  claude              # Use with new settings"
-    echo "  claude --help       # View all options"
+    echo "  claude              # Claude Code with new settings"
+    echo "  codex               # Codex CLI with new settings"
     echo
     print_info "Installation options:"
     echo "  --project           # Install in project scope (.claude/)"
     echo "  --local             # Install in local scope (.claude/settings.local.json)"
     echo "  --force             # Force overwrite without merging"
+    echo "  --simple            # Use simple mode (workspace full permissions)"
     echo
 }
 

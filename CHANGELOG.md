@@ -5,6 +5,27 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.2.0] - 2026-01-08
+
+### Added
+- **Simple mode** (`--simple`): New installation option for workspace full permissions
+  - Minimal configuration without fine-grained permission rules
+  - All operations (Bash, Read, Edit, Write, etc.) allowed in workspace
+  - No confirmation prompts for any operations
+  - Best for personal projects and trusted environments
+- New configuration file `claude/settings-simple.json` for simple mode
+- **Codex CLI support**: New configuration for OpenAI Codex CLI
+  - New configuration file `codex/config-simple.toml`
+  - Full sandbox access, no approval required
+  - Network access enabled
+  - Preserves existing project trust settings during installation
+
+### Changed
+- Updated installer to support `--simple` flag
+- Updated installer to support Codex CLI configuration
+- Updated README with simple mode and Codex documentation
+- Updated repository structure documentation
+
 ## [1.1.1] - 2026-01-04
 
 ### Added
@@ -62,6 +83,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Explicit confirmation for destructive operations
 - Deny rules for dangerous commands (rm -rf, sudo)
 
+[1.2.0]: https://github.com/biglone/ai-dev-config/compare/v1.1.1...v1.2.0
 [1.1.1]: https://github.com/biglone/ai-dev-config/compare/v1.1.0...v1.1.1
 [1.1.0]: https://github.com/biglone/ai-dev-config/compare/v1.0.0...v1.1.0
 [1.0.0]: https://github.com/biglone/ai-dev-config/releases/tag/v1.0.0

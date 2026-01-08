@@ -1,0 +1,14 @@
+# Codex CLI Configuration - Simple Mode (Workspace Full Permissions)
+# This configuration enables full access within the current workspace
+
+# Approval policy: never ask for approval
+approval_policy = "never"
+
+# Sandbox mode: full access (no restrictions)
+sandbox_mode = "danger-full-access"
+
+# Enable network access
+network_access = "enabled"
+
+# Hide the full access warning
+hide_full_access_warning = true

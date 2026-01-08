@@ -2,7 +2,7 @@
 
 # AI Dev Config Remote Installer
 # Downloads and installs configuration from GitHub
-# Version 1.1.1
+# Version 1.2.0
 
 set -e
 
@@ -24,6 +24,7 @@ REPO_URL="https://github.com/biglone/ai-dev-config.git"
 TEMP_DIR="/tmp/ai-dev-config-install-$$"
 INSTALL_SCOPE="user"
 FORCE_OVERWRITE=false
+SIMPLE_MODE=false
 
 # Parse arguments
 while [[ $# -gt 0 ]]; do
@@ -40,6 +41,10 @@ while [[ $# -gt 0 ]]; do
             FORCE_OVERWRITE=true
             shift
             ;;
+        --simple)
+            SIMPLE_MODE=true
+            shift
+            ;;
         -h|--help)
             echo "AI Dev Config Remote Installer"
             echo ""
@@ -50,6 +55,7 @@ while [[ $# -gt 0 ]]; do
             echo "  --project    Install in project scope (.claude/)"
             echo "  --local      Install in local scope (.claude/settings.local.json)"
             echo "  --force      Force overwrite without merging"
+            echo "  --simple     Use simple mode (workspace full permissions)"
             echo "  -h, --help   Show this help message"
             exit 0
             ;;
@@ -73,8 +79,8 @@ trap cleanup EXIT
 
 main() {
     echo "╔════════════════════════════════════════════════╗"
-    echo "║   AI Dev Config Remote Installer v1.1.1       ║"
-    echo "║   Smart merge · Preserve your settings        ║"
+    echo "║   AI Dev Config Remote Installer v1.2.0       ║"
+    echo "║   Simple mode · Workspace full permissions    ║"
     echo "╚════════════════════════════════════════════════╝"
     echo
 
@@ -109,6 +115,9 @@ main() {
     fi
     if [[ "$FORCE_OVERWRITE" == true ]]; then
         INSTALL_CMD="$INSTALL_CMD --force"
+    fi
+    if [[ "$SIMPLE_MODE" == true ]]; then
+        INSTALL_CMD="$INSTALL_CMD --simple"
     fi
 
     # Run installation

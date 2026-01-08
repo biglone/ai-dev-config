@@ -1,6 +1,6 @@
 # AI Dev Config
 
-> Personal configuration for AI-powered development tools (Claude Code, Cursor, and more)
+> Personal configuration for AI-powered development tools (Claude Code, Codex CLI, Cursor, and more)
 
 This repository contains my personal configuration files and automation scripts for AI development tools, designed to be easily shareable across different machines and teams.
 
@@ -40,7 +40,8 @@ git clone https://github.com/biglone/ai-dev-config.git
 cd ai-dev-config
 
 # Run installer
-./install.sh           # macOS/Linux
+./install.sh           # macOS/Linux (fine-grained permissions)
+./install.sh --simple  # macOS/Linux (workspace full permissions)
 .\install.ps1          # Windows PowerShell
 ```
 
@@ -85,6 +86,26 @@ claude plugin install ai-dev-config@biglone-ai-config
 
 ### Claude Code Configuration
 
+Two permission modes available:
+
+#### Simple Mode (`--simple`) - Recommended for trusted projects
+
+Minimal configuration with workspace full permissions (`claude/settings-simple.json`):
+
+```json
+{
+  "permissions": {
+    "allow": ["Bash", "Read", "Edit", "Write", "Glob", "Grep", "TodoWrite", "Task", "WebFetch", "WebSearch"]
+  }
+}
+```
+
+- All operations allowed in current workspace
+- No confirmation prompts
+- Best for personal projects and trusted environments
+
+#### Fine-grained Mode (default)
+
 Fine-grained permission controls in `claude/settings.json`:
 
 - **Auto-allowed operations:**
@@ -102,6 +123,22 @@ Fine-grained permission controls in `claude/settings.json`:
 - **Explicitly denied:**
   - Sensitive files: .env, *.pem, *.key, secrets/**
   - Dangerous commands: rm -rf, sudo
+
+### Codex CLI Configuration
+
+Simple mode configuration in `codex/config-simple.toml`:
+
+```toml
+approval_policy = "never"
+sandbox_mode = "danger-full-access"
+network_access = "enabled"
+hide_full_access_warning = true
+```
+
+- All operations allowed without approval
+- Full sandbox access (no restrictions)
+- Network access enabled
+- Best for trusted development environments
 
 ### Cursor Configuration
 
@@ -128,7 +165,8 @@ Custom Claude Code plugin with:
 Applies configuration globally to all projects on your machine.
 
 ```bash
-./install.sh           # Default scope (smart merge)
+./install.sh           # Default scope (fine-grained, smart merge)
+./install.sh --simple  # Simple mode (workspace full permissions)
 ./install.sh --force   # Force overwrite without merging
 ```
 
@@ -220,7 +258,10 @@ Extend `plugin/hooks/hooks.json`:
 ```
 ai-dev-config/
 ├── claude/
-│   └── settings.json          # Claude Code configuration
+│   ├── settings.json          # Claude Code configuration (fine-grained)
+│   └── settings-simple.json   # Claude Code configuration (simple mode)
+├── codex/
+│   └── config-simple.toml     # Codex CLI configuration (simple mode)
 ├── cursor/
 │   └── settings.json          # Cursor IDE configuration
 ├── plugin/
